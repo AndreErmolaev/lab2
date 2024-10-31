@@ -3,7 +3,7 @@
 #include <string>
 #include <iomanip>
 #include <cstdlib>
-WORKER::WORKER() : surname_(nullptr), name_(nullptr), patronyc_(nullptr), post_(nullptr), year_(0)
+WORKER::WORKER() : surname_(nullptr), name_(nullptr), patronyc_(nullptr), post_(nullptr), year_(2024)
 {
 	std::cout << "\n---------- КОНСТРУКТОР БЕЗ ПАРАМЕТРОВ WORKER! ----------\n";
 }
@@ -281,6 +281,8 @@ std::ostream& operator<<(std::ostream& out, WORKER* obj)
 	out << "Отчество: " << std::setw(width+1) << obj->get_patronyc() << std::endl;
 	out << "Должность: " << std::setw(width) << obj->get_post() << std::endl;
 	out << "Год: " << std::setw(width+6) << obj->get_year() << std::endl;
+	out << std::setfill('-') << std::setw(width + 12) << "\n";
+	out.fill(' ');
 	return out;
 }
 std::istream& operator>>(std::istream& in, WORKER* obj)
@@ -340,7 +342,7 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 	{
 		obj->set_year(year);
 	}
-	catch (WORKER::work_exception& excep)
+	catch (WORKER::work_exception& excep)                             ////////Это исключение нужно вынести наружу, в main
 	{
 		std::cout << excep.what() << excep.get_error() << std::endl;
 		std::cout << "Введите год поступления на службу ещё раз: ";
@@ -348,33 +350,57 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 	}
 	return in;
 }
+int compare(const void* str1, const void* str2)
+{
+	return strcmp(*(char**)str1, *(char**)str2);
+}
 void sort_alphabet(WORKER** mas)
 {
 	int size = 0;
 	while( mas[size] != nullptr)
 		size += 1;
+	std::cout << "size_mas = " << size << "\n\n";///////////////////////////////////////////////////////////////////
 	char* FIO = nullptr;
 	char** massiv = new char*[size];
 	for (int i = 0; i < size; i++)
 	{
-		FIO = new char[std::strlen(mas[i]->get_surname()) + std::strlen(mas[i]->get_name()) + std::strlen(mas[i]->get_patronyc()) + 3];
+		FIO = new char[std::strlen(mas[i]->get_surname()) + std::strlen(mas[i]->get_name()) + std::strlen(mas[i]->get_patronyc()) + 4];
 		int index = 0;
-		for (int index = 0; index < std::strlen(mas[i]->get_surname()); index++)
-			FIO[index] = (mas[i]->get_surname())[index];
-		FIO[index] = ' ';
-		for (int j = 0; j < std::strlen(mas[i]->get_name()); j++,index++)
+		for (int j = 0; j < std::strlen(mas[i]->get_surname()); j++,index++)
 			FIO[index] = (mas[i]->get_surname())[j];
-		FIO[index] = ' ';
+		FIO[index++] = ' ';
+		for (int j = 0; j < std::strlen(mas[i]->get_name()); j++,index++)
+			FIO[index] = (mas[i]->get_name())[j];
+		FIO[index++] = ' ';
 		for (int j = 0; j < std::strlen(mas[i]->get_patronyc()); j++, index++)
 			FIO[index] = (mas[i]->get_patronyc())[j];
+		FIO[index++] = ' ';
 		FIO[index] = '\0';
+		std::cout << "\nsize = " << index+1 << " " << std::strlen(FIO) + 1 << "\n" << FIO << "\n";/////////////////////////////////////////////
 		massiv[i] = FIO;
-		delete[] FIO;
+		std::cout << (void*)massiv[i] << "\n\n";/////////////////////////////////////////////////
+		//delete[] FIO;
 	}
 	qsort(massiv, size, sizeof(char**), compare);
+	for (int i = 0; i < size; i++)
+	{
+		char* vrem[3];
+		char* next_tok = nullptr;
+		vrem[0] = strtok(massiv[i], " ");
+		vrem[1] = strtok(nullptr, " ");
+		vrem[2] = strtok(nullptr, " ");
+		int number = -1;
+		for (int j = 0; j < size;j++)
+		{
+			if (std::strcmp(vrem[0], mas[j]->get_surname()) == 0 && std::strcmp(vrem[1], mas[j]->get_name()) == 0 && std::strcmp(vrem[2], mas[j]->get_patronyc()) == 0)
+			{
+				WORKER* for_change = mas[j];
+				mas[j] = mas[i];
+				mas[i] = for_change;
+			}
+		}
+	}
+	for (int i = 0; i < size; i++)
+		delete[] massiv[i];
 	delete[] massiv;
-}
-int compare(const void* str1, const void* str2)
-{
-	return strcmp(*(char**)str1, *(char**)str2);
 }

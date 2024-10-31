@@ -1,5 +1,6 @@
 #ifndef WORKER_H_
 #define WORKER_H_
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 class WORKER
 {
@@ -41,4 +42,5 @@ inline char* WORKER::get_post() const { return post_; }
 inline int WORKER::get_year() const { return year_; }
 std::ostream& operator<<(std::ostream& out, WORKER* obj);
 std::istream& operator>>(std::istream& in, WORKER* obj);
+void sort_alphabet(WORKER** mas);
 #endif
