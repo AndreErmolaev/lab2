@@ -18,7 +18,7 @@ WORKER::WORKER(const char* sur,const char* name,const char* patr,const char* pos
 	}
 	catch (std::bad_alloc)
 	{
-		std::cout << "------- Недостаточно памяти! ---------\n";
+		std::cerr << "------- Недостаточно памяти! ---------\n";
 		exit(EXIT_FAILURE);
 	}
 	std::strcpy(surname_, sur);
@@ -39,7 +39,7 @@ WORKER::WORKER(WORKER& copy) : surname_(nullptr), name_(nullptr), patronyc_(null
 	}
 	catch (std::bad_alloc)
 	{
-		std::cout << "------- Недостаточно памяти! ---------\n";
+		std::cerr << "------- Недостаточно памяти! ---------\n";
 		exit(EXIT_FAILURE);
 	}
 	std::strcpy(surname_, copy.surname_);
@@ -97,7 +97,7 @@ void WORKER::set_surname(const char* sur)             //надо предусмотреть, чтоб
 			}
 			catch (std::bad_alloc)
 			{
-				std::cout << "------- Недостаточно памяти! ---------\n";
+				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
 			std::strcpy(surname_, sur);
@@ -113,7 +113,7 @@ void WORKER::set_surname(const char* sur)             //надо предусмотреть, чтоб
 		}
 		catch (std::bad_alloc)
 		{
-			std::cout << "------- Недостаточно памяти! ---------\n";
+			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
 		std::strcpy(surname_, sur);
@@ -146,7 +146,7 @@ void WORKER::set_name(const char* name)
 			}
 			catch (std::bad_alloc)
 			{
-				std::cout << "------- Недостаточно памяти! ---------\n";
+				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
 			std::strcpy(name_, name);
@@ -162,7 +162,7 @@ void WORKER::set_name(const char* name)
 		}
 		catch (std::bad_alloc)
 		{
-			std::cout << "------- Недостаточно памяти! ---------\n";
+			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
 		std::strcpy(name_, name);
@@ -195,7 +195,7 @@ void WORKER::set_patronyc(const char* patr)
 			}
 			catch (std::bad_alloc)
 			{
-				std::cout << "------- Недостаточно памяти! ---------\n";
+				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
 			std::strcpy(patronyc_, patr);
@@ -211,7 +211,7 @@ void WORKER::set_patronyc(const char* patr)
 		}
 		catch (std::bad_alloc)
 		{
-			std::cout << "------- Недостаточно памяти! ---------\n";
+			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
 		std::strcpy(patronyc_, patr);
@@ -226,7 +226,7 @@ void WORKER::set_post(const char* post)
 {
 	unsigned int size_post = std::strlen(post);
 	unsigned int size_post_ = 0;
-	if (patronyc_ != nullptr)
+	if (post_ != nullptr)
 	{
 		size_post_ = std::strlen(post_);
 		if (size_post == size_post_)               //память перевыделять для post не надо
@@ -244,7 +244,7 @@ void WORKER::set_post(const char* post)
 			}
 			catch (std::bad_alloc)
 			{
-				std::cout << "------- Недостаточно памяти! ---------\n";
+				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
 			std::strcpy(post_, post);
@@ -260,7 +260,7 @@ void WORKER::set_post(const char* post)
 		}
 		catch (std::bad_alloc)
 		{
-			std::cout << "------- Недостаточно памяти! ---------\n";
+			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
 		std::strcpy(post_, post);
@@ -271,7 +271,7 @@ void WORKER::set_post(const char* post)
 
 std::ostream& operator<<(std::ostream& out, WORKER* obj)
 {
-	int width = std::strlen(obj->get_surname());
+	unsigned int width = std::strlen(obj->get_surname());
 	if (width < std::strlen(obj->get_name()))
 		width = std::strlen(obj->get_name());
 	if (width < std::strlen(obj->get_patronyc()))
@@ -329,40 +329,35 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 
 
 	std::cout << "Введите год поступления на службу: ";
-	BACK:;
 	int year = 0;
-	while (!in >> year)
+	in >> year;
+	while (in.fail())
 	{
 		in.clear();
 		while (in.get() != '\n')
 			continue;
 		std::cout << "--- Введено не число!\nПовторите ввод: ";
+		in >> year;
 	}
-	try
-	{
-		obj->set_year(year);
-	}
-	catch (WORKER::work_exception& excep)                             ////////Это исключение нужно вынести наружу, в main
-	{
-		std::cout << excep.what() << excep.get_error() << std::endl;
-		std::cout << "Введите год поступления на службу ещё раз: ";
-		goto BACK;
-	}
+	if(in.peek() == '\n' || in.peek() == ' ' || in.peek() == '\t')
+		in.get();
+	std::cout << "YEAR = " << year << "\n\n"; /////////////////////////////////////
+	obj->set_year(year);
 	return in;
 }
 int compare(const void* str1, const void* str2)
 {
 	return strcmp(*(char**)str1, *(char**)str2);
 }
-void sort_alphabet(WORKER** mas)
+void sort_alphabet(WORKER** mas,unsigned int size)
 {
-	int size = 0;
-	while( mas[size] != nullptr)
-		size += 1;
+	//int size = 0;
+	//while( mas[size] != nullptr)
+	//	size += 1;
 	std::cout << "size_mas = " << size << "\n\n";///////////////////////////////////////////////////////////////////
 	char* FIO = nullptr;
 	char** massiv = new char*[size];
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		FIO = new char[std::strlen(mas[i]->get_surname()) + std::strlen(mas[i]->get_name()) + std::strlen(mas[i]->get_patronyc()) + 4];
 		int index = 0;
@@ -379,10 +374,9 @@ void sort_alphabet(WORKER** mas)
 		std::cout << "\nsize = " << index+1 << " " << std::strlen(FIO) + 1 << "\n" << FIO << "\n";/////////////////////////////////////////////
 		massiv[i] = FIO;
 		std::cout << (void*)massiv[i] << "\n\n";/////////////////////////////////////////////////
-		//delete[] FIO;
 	}
 	qsort(massiv, size, sizeof(char**), compare);
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		char* vrem[3];
 		char* next_tok = nullptr;
@@ -390,7 +384,7 @@ void sort_alphabet(WORKER** mas)
 		vrem[1] = strtok(nullptr, " ");
 		vrem[2] = strtok(nullptr, " ");
 		int number = -1;
-		for (int j = 0; j < size;j++)
+		for (unsigned int j = 0; j < size;j++)
 		{
 			if (std::strcmp(vrem[0], mas[j]->get_surname()) == 0 && std::strcmp(vrem[1], mas[j]->get_name()) == 0 && std::strcmp(vrem[2], mas[j]->get_patronyc()) == 0)
 			{
@@ -400,7 +394,7 @@ void sort_alphabet(WORKER** mas)
 			}
 		}
 	}
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 		delete[] massiv[i];
 	delete[] massiv;
 }

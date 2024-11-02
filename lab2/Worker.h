@@ -31,7 +31,7 @@ public:
 	public:
 		work_exception(int error_year = 2024) { error_year_ = error_year; }
 		inline int get_error() const { return error_year_; }
-		const char* what() const override { return "!!! ÈÑÊËŞ×ÅÍÈÅ\nÃÎÄ ÍÅ ÌÎÆÅÒ ÁÛÒÜ ÍÅÏÎËÎÆÈÒÅËÜÍÛÌ! Ââåä¸ííîå çíà÷åíèå: "; }
+		const char* what() const override { return "! ÈÑÊËŞ×ÅÍÈÅ ! ÃÎÄ ÍÅ ÌÎÆÅÒ ÁÛÒÜ ÍÅÏÎËÎÆÈÒÅËÜÍÛÌ! Ââåä¸ííîå çíà÷åíèå: "; }
 	};
 };
 inline void WORKER::set_year(int year) { if (year <= 0) throw work_exception(year); year_ = year; }
@@ -42,5 +42,5 @@ inline char* WORKER::get_post() const { return post_; }
 inline int WORKER::get_year() const { return year_; }
 std::ostream& operator<<(std::ostream& out, WORKER* obj);
 std::istream& operator>>(std::istream& in, WORKER* obj);
-void sort_alphabet(WORKER** mas);
+void sort_alphabet(WORKER** mas,unsigned int size);
 #endif
