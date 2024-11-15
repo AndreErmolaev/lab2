@@ -57,9 +57,6 @@ WORKER::~WORKER()
 	delete[] post_;
 	std::cout << "\n---------- ДЕСТРУКТОР КЛАССА WORKER! ----------\n";
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 WORKER& WORKER::operator=(const WORKER& obj)
 {
 	if (this != &obj)
@@ -72,22 +69,15 @@ WORKER& WORKER::operator=(const WORKER& obj)
 	}
 	return *this;
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void WORKER::set_surname(const char* sur)             //надо предусмотреть, чтобы не передавались ПУСТЫЕ строки
+void WORKER::set_surname(const char* sur)
 {
 	unsigned int size_sur = std::strlen(sur);
 	unsigned int size_surname = 0;
 	if (surname_ != nullptr)
 	{
 		size_surname = std::strlen(surname_);
-		if (size_sur == size_surname)               //память перевыделять для surname не надо
-		{
+		if (size_sur == size_surname)               //память перевыделять не надо
 			std::strcpy(surname_, sur);
-
-			std::cout << "\n\n--- size_sur == size_surname\n\n";  ////////////////////////////
-		}
 		else
 		{
 			delete[] surname_;
@@ -100,9 +90,8 @@ void WORKER::set_surname(const char* sur)             //надо предусмотреть, чтоб
 				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
+			surname_[0] = '\0';              //Если передана пустая строка
 			std::strcpy(surname_, sur);
-
-			std::cout << "\n\n--- size_sur != size_surname\n\n";  /////////////////////////////
 		}
 	}
 	else
@@ -116,14 +105,10 @@ void WORKER::set_surname(const char* sur)             //надо предусмотреть, чтоб
 			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
+		surname_[0] = '\0';              //Если передана пустая строка
 		std::strcpy(surname_, sur);
-
-		std::cout << "\n\n--- nullptr\n\n";  /////////////////////////////
 	}
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void WORKER::set_name(const char* name)
 {
 	unsigned int size_name = std::strlen(name);
@@ -131,12 +116,8 @@ void WORKER::set_name(const char* name)
 	if (name_ != nullptr)
 	{
 		size_name_ = std::strlen(name_);
-		if (size_name == size_name_)               //память перевыделять для name_ не надо
-		{
+		if (size_name == size_name_)               //память перевыделять не надо
 			std::strcpy(name_, name);
-
-			std::cout << "\n\n--- size_name == size_name_\n\n";  ////////////////////////////
-		}
 		else
 		{
 			delete[] name_;
@@ -149,9 +130,8 @@ void WORKER::set_name(const char* name)
 				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
+			name_[0] = '\0';              //Если передана пустая строка
 			std::strcpy(name_, name);
-
-			std::cout << "\n\n--- size_name != size_name_\n\n";  /////////////////////////////
 		}
 	}
 	else
@@ -165,14 +145,10 @@ void WORKER::set_name(const char* name)
 			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
+		name_[0] = '\0';              //Если передана пустая строка
 		std::strcpy(name_, name);
-
-		std::cout << "\n\n--- nullptr\n\n";  /////////////////////////////
 	}
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void WORKER::set_patronyc(const char* patr)
 {
 	unsigned int size_patr = std::strlen(patr);
@@ -180,12 +156,8 @@ void WORKER::set_patronyc(const char* patr)
 	if (patronyc_ != nullptr)
 	{
 		size_patronyc = std::strlen(patronyc_);
-		if (size_patr == size_patronyc)               //память перевыделять для surname не надо
-		{
+		if (size_patr == size_patronyc)               //память перевыделять не надо
 			std::strcpy(patronyc_, patr);
-
-			std::cout << "\n\n--- size_patr == size_patron\n\n";  ////////////////////////////
-		}
 		else
 		{
 			delete[] patronyc_;
@@ -198,9 +170,8 @@ void WORKER::set_patronyc(const char* patr)
 				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
+			patronyc_[0] = '\0';              //Если передана пустая строка
 			std::strcpy(patronyc_, patr);
-
-			std::cout << "\n\n--- size_patr != size_patron\n\n";  /////////////////////////////
 		}
 	}
 	else
@@ -214,14 +185,10 @@ void WORKER::set_patronyc(const char* patr)
 			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
+		patronyc_[0] = '\0';              //Если передана пустая строка
 		std::strcpy(patronyc_, patr);
-
-		std::cout << "\n\n--- nullptr\n\n";  /////////////////////////////
 	}
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void WORKER::set_post(const char* post)
 {
 	unsigned int size_post = std::strlen(post);
@@ -229,12 +196,8 @@ void WORKER::set_post(const char* post)
 	if (post_ != nullptr)
 	{
 		size_post_ = std::strlen(post_);
-		if (size_post == size_post_)               //память перевыделять для post не надо
-		{
+		if (size_post == size_post_)               //память перевыделять не надо
 			std::strcpy(post_, post);
-
-			std::cout << "\n\n--- size_post == size_post\n\n";  ////////////////////////////
-		}
 		else
 		{
 			delete[] post_;
@@ -247,9 +210,8 @@ void WORKER::set_post(const char* post)
 				std::cerr << "------- Недостаточно памяти! ---------\n";
 				exit(EXIT_FAILURE);
 			}
-			std::strcpy(post_, post);
-
-			std::cout << "\n\n--- size_post != size_post\n\n";  /////////////////////////////
+			post_[0] = '\0';              //Если передана пустая строка
+			std::strcpy(post_, post);		
 		}
 	}
 	else
@@ -263,12 +225,10 @@ void WORKER::set_post(const char* post)
 			std::cerr << "------- Недостаточно памяти! ---------\n";
 			exit(EXIT_FAILURE);
 		}
+		post_[0] = '\0';              //Если передана пустая строка
 		std::strcpy(post_, post);
-
-		std::cout << "\n\n--- nullptr\n\n";  /////////////////////////////
 	}
 }
-
 std::ostream& operator<<(std::ostream& out, WORKER* obj)
 {
 	unsigned int width = std::strlen(obj->get_surname());
@@ -276,6 +236,8 @@ std::ostream& operator<<(std::ostream& out, WORKER* obj)
 		width = std::strlen(obj->get_name());
 	if (width < std::strlen(obj->get_patronyc()))
 		width = std::strlen(obj->get_patronyc());
+	if (width < std::strlen(obj->get_post()))
+		width = std::strlen(obj->get_post());
 	out << "Фамилия: " << std::setw(width+2) << obj->get_surname() << std::endl;
 	out << "Имя: " << std::setw(width+6) << obj->get_name() << std::endl;
 	out << "Отчество: " << std::setw(width+1) << obj->get_patronyc() << std::endl;
@@ -296,8 +258,6 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 		std::getline(in, str);
 	}
 	obj->set_surname(str.c_str());
-
-
 	std::cout << "Введите имя: ";
 	std::getline(in, str);
 	while (str[0] == '\0')
@@ -306,8 +266,6 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 		std::getline(in, str);
 	}
 	obj->set_name(str.c_str());
-
-
 	std::cout << "Введите отчество: ";
 	std::getline(in, str);
 	while (str[0] == '\0')
@@ -316,8 +274,6 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 		std::getline(in, str);
 	}
 	obj->set_patronyc(str.c_str());
-
-
 	std::cout << "Введите должность: ";
 	std::getline(in, str);
 	while (str[0] == '\0')
@@ -326,8 +282,6 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 		std::getline(in, str);
 	}
 	obj->set_post(str.c_str());
-
-
 	std::cout << "Введите год поступления на службу: ";
 	int year = 0;
 	in >> year;
@@ -341,7 +295,6 @@ std::istream& operator>>(std::istream& in, WORKER* obj)
 	}
 	if(in.peek() == '\n' || in.peek() == ' ' || in.peek() == '\t')
 		in.get();
-	std::cout << "YEAR = " << year << "\n\n"; /////////////////////////////////////
 	obj->set_year(year);
 	return in;
 }
@@ -351,10 +304,6 @@ int compare(const void* str1, const void* str2)
 }
 void sort_alphabet(WORKER** mas,unsigned int size)
 {
-	//int size = 0;
-	//while( mas[size] != nullptr)
-	//	size += 1;
-	std::cout << "size_mas = " << size << "\n\n";///////////////////////////////////////////////////////////////////
 	char* FIO = nullptr;
 	char** massiv = new char*[size];
 	for (unsigned int i = 0; i < size; i++)
@@ -371,19 +320,15 @@ void sort_alphabet(WORKER** mas,unsigned int size)
 			FIO[index] = (mas[i]->get_patronyc())[j];
 		FIO[index++] = ' ';
 		FIO[index] = '\0';
-		std::cout << "\nsize = " << index+1 << " " << std::strlen(FIO) + 1 << "\n" << FIO << "\n";/////////////////////////////////////////////
 		massiv[i] = FIO;
-		std::cout << (void*)massiv[i] << "\n\n";/////////////////////////////////////////////////
 	}
 	qsort(massiv, size, sizeof(char**), compare);
 	for (unsigned int i = 0; i < size; i++)
 	{
 		char* vrem[3];
-		char* next_tok = nullptr;
 		vrem[0] = strtok(massiv[i], " ");
 		vrem[1] = strtok(nullptr, " ");
 		vrem[2] = strtok(nullptr, " ");
-		int number = -1;
 		for (unsigned int j = 0; j < size;j++)
 		{
 			if (std::strcmp(vrem[0], mas[j]->get_surname()) == 0 && std::strcmp(vrem[1], mas[j]->get_name()) == 0 && std::strcmp(vrem[2], mas[j]->get_patronyc()) == 0)
